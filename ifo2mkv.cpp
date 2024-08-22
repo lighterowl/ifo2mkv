@@ -292,13 +292,14 @@ int main(int argc, char **argv)
     }
     else
     {
-      if (title >= vmg->tt_srpt->nr_of_srpts)
+      auto const num_titles = vmg->tt_srpt->nr_of_srpts;
+      if (title > num_titles)
       {
-        std::cerr << "Title " << title << " requested, but DVD has " << vmg->tt_srpt->nr_of_srpts << " titles.\n";
+        std::cerr << std::format("Title {} requested, but DVD has {} titles.\n", title, num_titles);
         return 1;
       }
       auto writer = matroska_chapter_xml_writer{std::cout};
-      get_chapters_for_title(*dvd, *vmg, title, writer);
+      get_chapters_for_title(*dvd, *vmg, title - 1, writer);
     }
   }
   catch (libdvdread_exception const &ex)
